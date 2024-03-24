@@ -12,6 +12,7 @@ urlpatterns = [
     path('login',login_page,name="page-login"),
     path('browse/profile',select_profile,name="page-select-profile"),
     path('browse/profiles/<profileId>/update',updateProfile,name="page-update-profile"),
-    path('browse/profiles/<profileId>/delete',delete_profile,name="page-delete-profile")
+    path('browse/profiles/<profileId>/delete',delete_profile,name="page-delete-profile"),
+    path('dashboard', load_dashboard, name='page-dashboard')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

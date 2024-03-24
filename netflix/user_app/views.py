@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 #*register sayfası
 def register_page(request):
 
-    if request.user.is_authenticated:
+    if request.user.is_authenticated:   #kullanıcı girişliyse
         return redirect('page-select-profile')
 
     context = {}
@@ -60,7 +60,7 @@ def login_page(request):
         return render(request,"login.html")
     
 
-@login_required(login_url="page-login")
+@login_required(login_url="page-login")   #eğer giirşli değilse page-logine yönlendirilcek.
 def select_profile(request):
 
     context = {}
@@ -83,25 +83,26 @@ def select_profile(request):
 
     else:
         #güncelleme formu
-        profileUpdateForms = {}
-        for profile in request.user.profile.all():
-            profileUpdateForms[profile.id] = ProfileForm(instance=profile)
+        profileUpdateForms = {}  #obje olusturduk
+        for profile in request.user.profile.all():  #bütün profilleri getir. 
+            profileUpdateForms[profile.id] = ProfileForm(instance=profile)  #bu instance ile profile içeriğini bana getir demek.
 
-            context['UpdateForms'] = profileUpdateForms.items()
+            context['UpdateForms'] = profileUpdateForms.items()  #update formu bana obje olarak getir context ile bunu frontende göndermeye çalılyoruz.
 
 
         return render(request,"profile.html",context)
     
-@login_required(login_url="page-login")
+@login_required(login_url="page-login")  #girişli değilse update yapamaz.
 def updateProfile(request,profileId):
     
     if request.method == 'POST':
-        instance = NetflixProfile.objects.filter(id = profileId).first()
+        instance = NetflixProfile.objects.filter(id = profileId).first() #profile id si id ye eşit olanları netflixprofile modelinden getir.
 
         if instance is None:
             return redirect('page-select-profile')
 
-        profile = ProfileForm(request.POST,request.FILES, instance=instance)
+        profile = ProfileForm(request.POST,request.FILES, instance=instance)  #istek yapıcaz post ile o yüzden equest.post vs yapmalıyız.Foto eklenecek ondan dolayı fıles
+        #profil ekleme modal yapımı getirmesi için. instance fonksiyonu insatnce değişkeni 
 
         if profile.is_valid():
             #veritabanına kaydet
@@ -117,7 +118,7 @@ def updateProfile(request,profileId):
     
 
 #delete profile
-@login_required(login_url="page-login")
+@login_required(login_url="page-login")  #girişli değilse delete yapamaz.
 def delete_profile(request,profileId):
 
     instance = NetflixProfile.objects.filter(id = profileId).first()
@@ -127,3 +128,9 @@ def delete_profile(request,profileId):
     else:
         instance.delete()
         return redirect('page-select-profile')
+    
+
+#dashbord html için görüntüleme fonksyonu
+def load_dashboard(request):
+
+    return render(request,"dashboard.html")

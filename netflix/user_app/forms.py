@@ -3,7 +3,7 @@ from netflix_app.models import *
 
 class UserForm(forms.ModelForm):
 
-    email = forms.CharField(label="",widget=forms.EmailInput(attrs={"placeholder": "E-mail Adresi"}))
+    email = forms.CharField(label="",widget=forms.EmailInput(attrs={"placeholder": "E-mail Adresi"}))  
     username = forms.CharField(label="",widget=forms.TextInput(attrs={"placeholder": "Username"}))
     password = forms.CharField(label="",widget=forms.PasswordInput(attrs={"placeholder": "Sifreniz"}))
 

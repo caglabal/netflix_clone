@@ -11,7 +11,8 @@
 {% block site-icerik %}
     
 
-{% if request.user.profile.count < 4 %}
+{% if request.user.profile.count < 4 %}    
+{% comment %} models.pydaki profile kadar geldim. Buradaki 4 de 4 den fazla profil olusmaması için yani + butonua tıklansa bile modal açılmaz. {% endcomment %}
 
     
 
@@ -45,7 +46,8 @@
     
 
 
-{% for id, form in UpdateForms %}
+{% for id, form in UpdateForms %}  
+{% comment %} views.py da select profile de id de olmalı ve oradaki contexti updateforms u çağırdık {% endcomment %}
 
 <!--profil güncelleme Modal -->
 <div class="modal fade" id="updateModal-{{id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -104,6 +106,8 @@
 
             </div>
 
+
+         <a href="">
         <div class="n-profile-banner">
 
                 <img src="{{profile.avatar.url}}" alt="profile-1">
@@ -115,7 +119,8 @@
             <h3 class="text-center">{{profile.name}}</h3>
         </div>
         </div>
-
+    </a>
+    
     </div>
 
     {% endfor %}
@@ -166,6 +171,10 @@
         if (onayla) {
 
             window.location.href = event.target.href()
+        }
+        else{
+            //varsayılan degeri unuttur
+            event.preventDefault()
         }
 
     }
