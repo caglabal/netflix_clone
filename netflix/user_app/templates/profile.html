@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block site-baslik %}
+    Profil Yönetimi
+{% endblock site-baslik %}
+    
+
+
+{% block site-icerik %}
+    
+
+{% if request.user.profile.count < 4 %}
+
+    
+
+<!-- yeni profil oluşturma Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Profil Oluştur</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+            <form action="{% url 'page-select-profile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form}}
+
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Oluştur</button>
+        </div>
+    </form>
+</div>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+<!-- modal biter -->
+
+    
+
+
+{% for id, form in UpdateForms %}
+
+<!--profil güncelleme Modal -->
+<div class="modal fade" id="updateModal-{{id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Profil Oluştur</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+            <form action="{% url 'page-update-profile' id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form}}
+
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Oluştur</button>
+        </div>
+    </form>
+</div>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+<!-- modal biter -->
+
+
+<div class="container-fluid text-light mt-5" style="overflow: hidden;">
+<div style="height: 100%;">
+<div class="row" style="height: 80%;">
+
+    <h1 class="text-center">Kim İzliyor?</h1>
+
+    <div class="d-flex">
+
+        
+        {% for profile in request.user.profile.all %}
+            
+    <div class="col-2 m-3">
+
+        <div class="n-profile-container">
+
+            <div class="n-edit text-end">
+                <!-- sil -->
+                <a style="float: left;" href="{% url 'page-delete-profile' profile.id %}" onclick="ask(event)">
+                    <i class="fa-solid fa-trash-can fa-xl"></i></a>
+
+
+                <!-- Güncelle -->
+                <a type="button" class="btn btn-primary" href="javascript:void(0)"  
+                    data-bs-toggle="modal" data-bs-target="#updateModal-{{profile.id}}">
+                    <i class="fa-solid fa-pen-to-square fa-xl"></i>
+                </a>
+
+            </div>
+
+        <div class="n-profile-banner">
+
+                <img src="{{profile.avatar.url}}" alt="profile-1">
+        </div>
+
+
+        <div class="n-profile-name">
+
+            <h3 class="text-center">{{profile.name}}</h3>
+        </div>
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+    <div class="col-4 ms-5" style="align-self: center;">
+
+        <button 
+
+            
+            {% if request.user.profile.count == 4 %}
+                disabled
+            {% endif %}
+                
+
+
+            class="btn btn-dark btn-add" 
+            data-bs-toggle="modal" 
+            data-bs-target="#exampleModal">
+            +
+    
+        </button>
+    </div>
+
+
+</div>
+</div>
+</div>
+
+</div>
+
+
+
+<script>
+
+
+    document.querySelectorAll("form input").forEach(element => {
+
+        element.classList.add("form-control")
+        element.classList.add("mb-3")
+
+    })
+
+
+    function ask(event) {
+
+        const onayla = confirm("Bu hesabi silmek istediğine mein misin? İslem geri alinamaz")
+
+        if (onayla) {
+
+            window.location.href = event.target.href()
+        }
+
+    }
+
+
+</script>
+
+
+
+{% endblock site-icerik %}
